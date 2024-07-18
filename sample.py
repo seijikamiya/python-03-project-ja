@@ -1,7 +1,7 @@
 import sqlite3
 
 # データベースファイルのパス
-db_path = "weather_stock.db"
+db_path = "stock_weather.db"
 
 # SQLiteデータベースに接続
 conn = sqlite3.connect(db_path)
@@ -12,18 +12,18 @@ cursor = conn.cursor()
 try:
     # データベースへのクエリ例（天気データの挿入）
     cursor.execute("""
-        INSERT INTO weather (date, city, temperature, precipitation, wind_speed)
+        INSERT INTO weather (date, city, weather_description, rain, temperature)
         VALUES (?, ?, ?, ?, ?)
-    """, ('2024-07-17', 'Tokyo', 28.5, 0.2, 3.5))
+    """, ('2024-07-17', 'Tokyo', 'Cloudy', 0, 28.0))
 
     # コミット（データベースへの変更を保存）
     conn.commit()
 
     # データベースへのクエリ例（株価データの挿入）
     cursor.execute("""
-        INSERT INTO stock_prices (date, company, price)
-        VALUES (?, ?, ?)
-    """, ('2024-07-17', 'Apple', 150.25))
+        INSERT INTO stock (date, company_code, 'open', 'high', 'low', 'close')
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, ('2024-07-17', 'Apple', 150.25, 10, 10, 10))
 
     # コミット（データベースへの変更を保存）
     conn.commit()
@@ -36,7 +36,7 @@ try:
         print(data)
 
     # 全ての株価データを取得
-    cursor.execute("SELECT * FROM stock_prices")
+    cursor.execute("SELECT * FROM stock")
     stock_data = cursor.fetchall()
     print("Stock prices:")
     for data in stock_data:
