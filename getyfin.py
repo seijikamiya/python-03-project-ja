@@ -23,7 +23,7 @@ class GetYfin:
         self.retry_delay = 5
 
     def fetch_data(self):
-        for attempt in range(self.max_retries):
+        for _ in range(self.max_retries):
             try:
                 # APIにリクエストを送信
                 response = requests.get(self.url, headers=self.headers, params=self.params)
@@ -52,14 +52,6 @@ class GetYfin:
                         'Low': low_prices,
                         'Close': close_prices
                     })
-                    
-                    # 日ごとにデータを集約
-                    df = df.groupby('Date').agg({
-                        'Open': 'first',
-                        'High': 'max',
-                        'Low': 'min',
-                        'Close': 'last'
-                    }).reset_index()
                     
                     # Company_codeをtickerから追加
                     df['Company_code'] = self.ticker
