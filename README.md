@@ -44,4 +44,4 @@ API: Weather Data & API
 株価情報:
 API: Yahoo finance
 機能: 特定の銘柄の最新の株価情報（開始値、終値、最高値、最低値等）を取得します。
-ドキュメント: [Yahoo finance](https://finance.yahoo.com/?guccounter=1)
+ドキュメント: [Yahoo finance](https://pypi.org/project/yfinance/)
