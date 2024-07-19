@@ -72,6 +72,13 @@ class GetYfin:
                 # リクエストでエラーが出た場合
                 print(f"An error occurred: {e}")
                 return None
+
+    def check_data(self):
+        pass
+
+    def add_new_feature(self):
+        pass
+
 '''
 # テスト用、データフレームを表示
 ticker = '9201.T'  # 企業コード
