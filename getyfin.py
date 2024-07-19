@@ -73,17 +73,29 @@ class GetYfin:
                 print(f"An error occurred: {e}")
                 return None
 
-    def check_data(self):
-        pass
+    def check_data(self, df):
+        if df.isnull().sum().any():
+            print("\nFound null value. Delete row with null value.")
+            df_cleaned = df.dropna()
+        else:
+            print("\nNo null value. Return original data")
+            df_cleaned = df
 
-    def add_new_feature(self):
-        pass
+        return df_cleaned
 
-'''
-# テスト用、データフレームを表示
-ticker = '9201.T'  # 企業コード
-get_yfin = GetYfin(ticker)
-df = get_yfin.fetch_data()
-if df is not None:
+    def add_new_feature(self, df):
+        if "Open" in df.columns and "Close" in df.columns:
+            df["Diff"] = df["Close"] - df["Open"]
+            return df
+        else:
+            print("columns aren't enough")
+            return df
+
+if __name__ == "__main__":
+    # テスト用、データフレームを表示
+    ticker = '9201.T'  # 企業コード
+    get_yfin = GetYfin(ticker)
+    df = get_yfin.fetch_data()
+    df = get_yfin.check_data(df)
+    df = get_yfin.add_new_feature(df)
     print(df)
-'''
