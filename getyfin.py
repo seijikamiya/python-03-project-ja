@@ -76,29 +76,33 @@ class GetYfin:
                 print(f"An error occurred: {e}")
                 return None
 
-    def check_data(self):
+    def check_data(self, df):
+        if df.isnull().sum().any():
+            print("\nFound null value. Delete row with null value.")
+            df_cleaned = df.dropna()
+        else:
+            print("\nNo null value. Return original data")
+            df_cleaned = df
+
+        return df_cleaned
+
+    def add_new_feature(self, df):
+        if "Open" in df.columns and "Close" in df.columns:
+            df["Diff"] = df["Close"] - df["Open"]
+            return df
+        else:
+            print("columns aren't enough")
+            return df
+    
+    def data_pipeline(self):
         df = self.fetch_data()
-        if df is not None:
-            # 欠損値がある行を削除
-            df = df.dropna()
+        df = self.check_data(df)
+        df = self.add_new_feature(df)
         return df
 
-    def add_new_feature(self):
-        df = self.check_data()
-        if df is not None:
-            # close - open の計算
-            df['price_rise'] = (df['Close'] - df['Open']).apply(lambda x: True if x > 0 else (False if x < 0 else None))
-        return df
-
-'''
-# テスト用、データフレームを表示
-ticker = '9201.T'  # 企業コード
-get_yfin = GetYfin(ticker)
-df = get_yfin.fetch_data()
-dfc = get_yfin.check_data()
-dff = get_yfin.add_new_feature()
-if df is not None:
+if __name__ == "__main__":
+    # テスト用、データフレームを表示
+    ticker = '9201.T'  # 企業コード
+    get_yfin = GetYfin(ticker)
+    df = get_yfin.data_pipeline()
     print(df)
-    print(dfc)
-    print(dff)
-'''
