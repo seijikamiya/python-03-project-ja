@@ -90,12 +90,16 @@ class GetYfin:
         else:
             print("columns aren't enough")
             return df
+    
+    def data_pipeline(self):
+        df = self.fetch_data()
+        df = self.check_data(df)
+        df = self.add_new_feature(df)
+        return df
 
 if __name__ == "__main__":
     # テスト用、データフレームを表示
     ticker = '9201.T'  # 企業コード
     get_yfin = GetYfin(ticker)
-    df = get_yfin.fetch_data()
-    df = get_yfin.check_data(df)
-    df = get_yfin.add_new_feature(df)
+    df = get_yfin.data_pipeline()
     print(df)
