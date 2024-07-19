@@ -1,4 +1,4 @@
-from db_manage import StockDB, WeatherDB, sql_query, df_to_sql
+from db_manage import StockDB, WeatherDB, sql_query, df_to_sql, create_relationship
 
 def main():
     #APIで株の情報を取得
@@ -19,6 +19,8 @@ def main():
 
     df = sql_query("stock_weather.db", query)
     df_to_sql(df, "stock_weather.db", "WeatherEffect")
+
+    create_relationship('stock_weather.db')
 
 if __name__ == "__main__":
     main()

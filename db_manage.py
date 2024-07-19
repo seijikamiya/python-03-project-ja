@@ -61,12 +61,65 @@ def sql_query(path, query):
 
 def df_to_sql(df, path, table_name):
         conn = sqlite3.connect(path)
-        df.index.name = 'WeatherEffectID'
-        df.to_sql(table_name, conn, index=True, if_exists='replace')
+        df.to_sql(table_name, conn, index=False, if_exists='replace')
 
         # コミットして接続を閉じる
         conn.commit()
         conn.close()
+
+def create_relationship(path):
+        # SQLiteデータベースに接続
+    conn = sqlite3.connect(path)
+
+    # 主キーおよび外部キーの設定
+    cursor = conn.cursor()
+
+    # 主キーの設定
+    cursor.execute('''
+        CREATE TABLE stock_new (
+            StockID INTEGER PRIMARY KEY,
+            Date DATE,
+            Open FLOAT,
+            High FLOAT,
+            Low FLOAT,
+            Close FLOAT,
+            Company_code TEXT,
+            Diff FLOAT
+        )
+    ''')
+    cursor.execute('INSERT INTO stock_new SELECT * FROM stock')
+    cursor.execute('DROP TABLE stock')
+    cursor.execute('ALTER TABLE stock_new RENAME TO stock')
+
+    cursor.execute('''
+        CREATE TABLE weather_new (
+            WeatherID INTEGER PRIMARY KEY,
+            Timestamp DATE,
+            City_id TEXT,
+            Weather_Description TEXT,
+            Rain FLOAT,
+            Temp FLOAT
+        )
+    ''')
+    cursor.execute('INSERT INTO weather_new SELECT * FROM weather')
+    cursor.execute('DROP TABLE weather')
+    cursor.execute('ALTER TABLE weather_new RENAME TO weather')
+
+    cursor.execute('''
+        CREATE TABLE WeatherEffectNew (
+            Weather_Description TEXT PRIMARY KEY,
+            PriceDiff FLOAT,
+            FOREIGN KEY(Weather_Description) REFERENCES weather(Weather_Description)
+        )
+    ''')
+    cursor.execute('INSERT INTO WeatherEffectNew SELECT Weather_Description, PriceDiff FROM WeatherEffect')
+    cursor.execute('DROP TABLE WeatherEffect')
+    cursor.execute('ALTER TABLE WeatherEffectNew RENAME TO WeatherEffect')
+
+    # 変更をコミットして接続を閉じる
+    conn.commit()
+    conn.close()
+    
 
 if __name__ == "__main__":
     # stock_db = StockDB("stock_weather.db", "stock")
