@@ -56,6 +56,9 @@ class GetYfin:
                     # Company_codeをtickerから追加
                     df['Company_code'] = self.ticker
                     
+                    # 欠損値がある行を削除
+                    df = df.dropna()
+                    
                     return df
                 
                 elif response.status_code == 429:
