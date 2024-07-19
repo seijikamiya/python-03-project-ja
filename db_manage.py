@@ -15,8 +15,7 @@ class BaseDB(ABC):
 
 class WeatherDB(BaseDB):
     def create_db(self):
-        api_key = 'WGPLJP357LBQE7KGMJ4MBG4GS'
-        get_weather = GetWeather(api_key)
+        get_weather = GetWeather()
         df = get_weather.fetch_data()
         df.index.name = 'WeatherID'
 
