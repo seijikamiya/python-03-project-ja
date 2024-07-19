@@ -3,7 +3,7 @@ import pandas as pd
 import time
 
 class GetYfin:
-    def __init__(self, ticker, range='10d', interval='1d'):
+    def __init__(self, ticker, range='100d', interval='1d'):
         self.ticker = ticker
         self.url = f'https://query1.finance.yahoo.com/v8/finance/chart/{ticker}'
         

@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 class GetWeather:
-    def __init__(self, api_key, city='tokyo', unit_group = "metric", content_type = "json", range = 10):
+    def __init__(self, api_key, city='tokyo', unit_group = "metric", content_type = "json", range = 30):
         self.api_key = api_key
         self.city = city
         self.unit_group = unit_group
