@@ -77,16 +77,28 @@ class GetYfin:
                 return None
 
     def check_data(self):
-        pass
+        df = self.fetch_data()
+        if df is not None:
+            # 欠損値がある行を削除
+            df = df.dropna()
+        return df
 
     def add_new_feature(self):
-        pass
+        df = self.check_data()
+        if df is not None:
+            # close - open の計算
+            df['price_rise'] = (df['Close'] - df['Open']).apply(lambda x: True if x > 0 else (False if x < 0 else None))
+        return df
 
 '''
 # テスト用、データフレームを表示
 ticker = '9201.T'  # 企業コード
 get_yfin = GetYfin(ticker)
 df = get_yfin.fetch_data()
+dfc = get_yfin.check_data()
+dff = get_yfin.add_new_feature()
 if df is not None:
     print(df)
+    print(dfc)
+    print(dff)
 '''
