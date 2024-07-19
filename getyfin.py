@@ -3,7 +3,7 @@ import pandas as pd
 import time
 
 class GetYfin:
-    def __init__(self, ticker, range='10d', interval='1d'):
+    def __init__(self, ticker, range='100d', interval='1d'):
         self.ticker = ticker
         self.url = f'https://query1.finance.yahoo.com/v8/finance/chart/{ticker}'
         
@@ -56,6 +56,9 @@ class GetYfin:
                     # Company_codeをtickerから追加
                     df['Company_code'] = self.ticker
                     
+                    # 欠損値がある行を削除
+                    df = df.dropna()
+                    
                     return df
                 
                 elif response.status_code == 429:
@@ -73,17 +76,33 @@ class GetYfin:
                 print(f"An error occurred: {e}")
                 return None
 
-    def check_data(self):
-        pass
+    def check_data(self, df):
+        if df.isnull().sum().any():
+            print("\nFound null value. Delete row with null value.")
+            df_cleaned = df.dropna()
+        else:
+            print("\nNo null value. Return original data")
+            df_cleaned = df
 
-    def add_new_feature(self):
-        pass
+        return df_cleaned
 
-'''
-# テスト用、データフレームを表示
-ticker = '9201.T'  # 企業コード
-get_yfin = GetYfin(ticker)
-df = get_yfin.fetch_data()
-if df is not None:
+    def add_new_feature(self, df):
+        if "Open" in df.columns and "Close" in df.columns:
+            df["Diff"] = df["Close"] - df["Open"]
+            return df
+        else:
+            print("columns aren't enough")
+            return df
+    
+    def data_pipeline(self):
+        df = self.fetch_data()
+        df = self.check_data(df)
+        df = self.add_new_feature(df)
+        return df
+
+if __name__ == "__main__":
+    # テスト用、データフレームを表示
+    ticker = '9201.T'  # 企業コード
+    get_yfin = GetYfin(ticker)
+    df = get_yfin.data_pipeline()
     print(df)
-'''

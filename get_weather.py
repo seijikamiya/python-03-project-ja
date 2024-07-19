@@ -1,11 +1,15 @@
 import requests
 import time
+import json
 import pandas as pd
 from datetime import datetime, timedelta
 
 class GetWeather:
-    def __init__(self, api_key, city='tokyo', unit_group = "metric", content_type = "json", range = 10):
-        self.api_key = api_key
+    def __init__(self, city='tokyo', unit_group = "metric", content_type = "json", range = 30):
+        with open("secret.json") as f:
+            json_file = json.load(f)
+            WEATHER_API_KEY = json_file["weather_api_key"]
+        self.api_key = WEATHER_API_KEY
         self.city = city
         self.unit_group = unit_group
         self.content_type = content_type
@@ -56,6 +60,5 @@ class GetWeather:
                 return None
 
 if __name__ == "__main__":
-    api_key = "WGPLJP357LBQE7KGMJ4MBG4GS"
-    get_weather = GetWeather(api_key)
+    get_weather = GetWeather()
     print(get_weather.fetch_data())
