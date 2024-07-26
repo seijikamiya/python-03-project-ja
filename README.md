@@ -16,7 +16,13 @@ DBeaver: データベースを確認するために使用します。
 インストール方法:DBeaverを[公式Webサイト](https://dbeaver.io/download/) (英語) からダウンロードしてインストールします。
 
 ### APIキーの取得
-- APIキーが必要です。それぞれのAPIに登録し、APIキーを取得してください。
+- 天気情報を取得するためには[Weather Data & API](https://www.visualcrossing.com/)のAPIキーが必要です。
+- 取得したAPIキーを、以下の形式で`secret.json`という名前のファイルに保存し、そのファイルを`python-03-project-ja`ディレクトリに配置してください。
+```
+{
+    "weather_api_key" : "Your API KEY"
+}
+```
 
 
 ## プロジェクトにおける重要な設計とその設計理由
