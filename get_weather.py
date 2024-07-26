@@ -30,7 +30,6 @@ class GetWeather:
                 # APIにリクエストを送信
                 url = f"{self.base_url}{self.city}/{self.start_date}/{self.end_date}?unitGroup={self.unit_group}&key={self.api_key}&contentType={self.content_type}"
                 response = requests.get(url)
-                response.raise_for_status()  # HTTPステータスコードが200以外の場合に例外を発生させる
                 
                 # レスポンスが正常な場合
                 if response.status_code == 200:
