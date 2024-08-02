@@ -27,7 +27,6 @@ class GetYfin:
             try:
                 # APIにリクエストを送信
                 response = requests.get(self.url, headers=self.headers, params=self.params)
-                response.raise_for_status()  # HTTPステータスコードが200以外の場合に例外を発生させる
                 
                 # レスポンスが正常な場合
                 if response.status_code == 200:
@@ -77,7 +76,11 @@ class GetYfin:
                 return None
 
     def check_data(self, df):
-        if df.isnull().sum().any():
+        if df is None:
+            print("The input dataframe is None. Please provide a valid dataframe.")
+            return None
+        
+        elif df.isnull().sum().any():
             print("\nFound null value. Delete row with null value.")
             df_cleaned = df.dropna()
         else:
@@ -87,7 +90,11 @@ class GetYfin:
         return df_cleaned
 
     def add_new_feature(self, df):
-        if "Open" in df.columns and "Close" in df.columns:
+        if df is None:
+            print("DataFrame is None")
+            return None
+    
+        elif "Open" in df.columns and "Close" in df.columns:
             df["Diff"] = df["Close"] - df["Open"]
             return df
         else:
